@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/Connect-Two-Game/static/css/main.79ca6771.chunk.css",
+    "main.js": "/Connect-Two-Game/static/js/main.b3ef5319.chunk.js",
+    "main.js.map": "/Connect-Two-Game/static/js/main.b3ef5319.chunk.js.map",
+    "runtime-main.js": "/Connect-Two-Game/static/js/runtime-main.ebfb28a1.js",
+    "runtime-main.js.map": "/Connect-Two-Game/static/js/runtime-main.ebfb28a1.js.map",
+    "static/js/2.0b44abe2.chunk.js": "/Connect-Two-Game/static/js/2.0b44abe2.chunk.js",
+    "static/js/2.0b44abe2.chunk.js.map": "/Connect-Two-Game/static/js/2.0b44abe2.chunk.js.map",
+    "index.html": "/Connect-Two-Game/index.html",
+    "static/css/main.79ca6771.chunk.css.map": "/Connect-Two-Game/static/css/main.79ca6771.chunk.css.map",
+    "static/js/2.0b44abe2.chunk.js.LICENSE.txt": "/Connect-Two-Game/static/js/2.0b44abe2.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ebfb28a1.js",
+    "static/js/2.0b44abe2.chunk.js",
+    "static/css/main.79ca6771.chunk.css",
+    "static/js/main.b3ef5319.chunk.js"
+  ]
+}
