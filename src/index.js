@@ -128,6 +128,7 @@ class Tools extends React.Component {
 class Game extends React.Component {
   constructor(props){
     super(props);
+    const emptyMap = MAPS[0];
     const pattern = createMap(emptyMap);
     const sameValueMap = patternToSameValueMap(pattern);
     const mapWithEmpty = fillMapWithEmpty(pattern, width, height);
@@ -263,21 +264,20 @@ class Game extends React.Component {
     setTimeout(() => { ctx.clearRect(0, 0, c.width, c.height);; }, 300);
   }
 
-  // async componentDidUpdate() {
-  //   console.log('component updated!');
-  //   const history = this.state.history.slice();
-  //   const currentEntry = history[history.length - 1];
-  //   const newPattern = currentEntry.map;
-  //   const withValue = Object.keys(newPattern).filter(pos => newPattern[pos]!=='null');
-  //   //if (withValue.length === 0)
-  //   //{ await this.nextLevel();}
-  // }
+  async componentDidUpdate() {
+    console.log('component updated!');
+    const history = this.state.history.slice();
+    const currentEntry = history[history.length - 1];
+    const newPattern = currentEntry.map;
+    const withValue = Object.keys(newPattern).filter(pos => newPattern[pos]!=='null');
+    if (withValue.length === 0)
+    { this.nextLevel();}
+  }
 
   nextLevel(){
-    alert('next level!');
     const nextLevel = (this.state.level < Object.keys(MAPS).length - 1)? this.state.level + 1 : 0;
     console.log(nextLevel);
-    //const emptyMap = emptyMap;
+    const emptyMap = MAPS[nextLevel];
     const pattern = createMap(emptyMap);
     const sameValueMap = patternToSameValueMap(pattern);
     const mapWithEmpty = fillMapWithEmpty(pattern, width, height);
@@ -302,44 +302,35 @@ class Game extends React.Component {
     const currentEntry = history[history.length - 1];
 
     const pageRender = () => {
-      // if (this.state.inGame){
-      //   return (
-      //     <div className='game'>
-      //       <Map version={currentEntry}
-      //       onClick = {(pos) => this.handleClick(pos)}
-      //       prev = {this.state.prevSelection}
-      //       curr = {this.state.currSelection}
-      //       tiptool = {this.state.tiptool}>
-      //       </Map>
-      //       <Tools
-      //       onClick = {(tool) => this.useTools(tool)}>
-      //       </Tools>
-      //     </div> 
-      //   );
-      // } else {
-        const text = (this.state.level === 0)? 'start' : 'next';
+      if (this.state.inGame){
         return (
-          {text}
-          //
+          <div className='game'>
+            <Map version={currentEntry}
+            onClick = {(pos) => this.handleClick(pos)}
+            prev = {this.state.prevSelection}
+            curr = {this.state.currSelection}
+            tiptool = {this.state.tiptool}>
+            </Map>
+            <Tools
+            onClick = {(tool) => this.useTools(tool)}>
+            </Tools>
+          </div> 
         );
-      // }
+      } else {
+        const start = (this.state.history.length === 1) ? 'start' : 'restart';
+        const text = (this.state.level === 0)? start : 'next';
+        return (
+          <button className='start' onClick={() => this.setState({inGame: true})}>{text}</button>
+        );
+      }
     }
     
     return (
       <div className='all'>
           <h1 className='Title'> Connect 2 </h1>
+          <p className='level-indicator'> Level {this.state.level} </p>
           <div className = 'board'>
-          <div className='game'>
-             <Map version={currentEntry}
-             onClick = {(pos) => this.handleClick(pos)}
-            prev = {this.state.prevSelection}
-            curr = {this.state.currSelection}
-            tiptool = {this.state.tiptool}>
-             </Map>
-             <Tools
-             onClick = {(tool) => this.useTools(tool)}>
-             </Tools>
-           </div> 
+             {pageRender()}
           </div>
           <canvas id='canvas' height='325' width='650'></canvas>
         </div>
@@ -433,7 +424,8 @@ function calculateGoodPairs(extendMap, sameValueMap){
         if (i !== j) {
           let connection = connectLine(positions[i], positions[j], extendMap);
           if (connection !== undefined && connection !== null){
-            goodPairs[positions[i]+'&'+positions[j]] = connection;
+            if (!(positions[j]+'&'+positions[i] in goodPairs)){
+            goodPairs[positions[i]+'&'+positions[j]] = connection;}
           }}}} }
   return goodPairs;
 }
@@ -450,13 +442,13 @@ function deconstruct(keyString){
 }
 
 function fourDirectionExtend(map, keyString){
-  const x = deconstruct(keyString).second;
-  const y = deconstruct(keyString).first;
+  const vertical = deconstruct(keyString).second;
+  const horizontal = deconstruct(keyString).first;
   let availableDot = [];
   //Go up
-  let upper = y - 1;
+  let upper = vertical - 1;
   while (upper >= 0){
-    let goUp = fetchKeyString([upper, x]);
+    let goUp = fetchKeyString([horizontal, upper]);
     if (map[goUp] === 'null'){
       availableDot.push((goUp));
       upper--;
@@ -464,9 +456,9 @@ function fourDirectionExtend(map, keyString){
   }
 
   //Go down
-  let lower = y + 1;
+  let lower = vertical + 1;
   while (lower < height){
-    let goDown = fetchKeyString([lower, x]);
+    let goDown = fetchKeyString([horizontal, lower]);
     if (map[goDown] === 'null'){
       availableDot.push((goDown));
       lower++;
@@ -474,9 +466,9 @@ function fourDirectionExtend(map, keyString){
   }
 
   //Go right
-  let right = x + 1;
-  while (right < width){
-    let goRight = fetchKeyString([y, right]);
+  let right = horizontal + 1;
+  while (right <= width){
+    let goRight = fetchKeyString([right, vertical]);
     if (map[goRight] === 'null'){
       availableDot.push((goRight));
       right++;
@@ -484,9 +476,9 @@ function fourDirectionExtend(map, keyString){
   }
 
   //Go left
-  let left = x - 1;
+  let left = horizontal - 1;
   while (left >= 0){
-    let goLeft = fetchKeyString([y, left]);
+    let goLeft = fetchKeyString([left, vertical]);
     if (map[goLeft] === 'null'){
       availableDot.push((goLeft));
       left--;
@@ -514,13 +506,18 @@ function connectLine(curr, prev, extendMap){
 
   for (var i=0; i<currExtend.length; i++){
     for (var j=0; j<prevExtend.length; j++){
+      if (currExtend[i]  === prevExtend[j]){
+        return [curr, currExtend[i], prev].join('->');
+      }
+    }
+  }   
+
+  for (var i=0; i<currExtend.length; i++){
+    for (var j=0; j<prevExtend.length; j++){
       const currExFirst = deconstruct(currExtend[i]).first;
       const currExSec = deconstruct(currExtend[i]).second;
       const prevExFirst = deconstruct(prevExtend[j]).first;
       const prevExSec = deconstruct(prevExtend[j]).second;
-        if (currExtend[i]  === prevExtend[j]){
-          return [curr, currExtend[i], prev].join('->');
-        } else {
           if ((currExFirst === prevExFirst) && (extendMap[prevExtend[j]].includes(currExtend[i]))) {
             return [curr, currExtend[i], prevExtend[j], prev].join('->');
           } if ((currExSec === prevExSec) && (extendMap[prevExtend[j]].includes(currExtend[i]))){
@@ -528,7 +525,6 @@ function connectLine(curr, prev, extendMap){
           }
         }
     }
-  }
   return null;
 }
 
