@@ -1,13 +1,136 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.all {
+  align-items: center;
+  display: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#canvas {
+  left: 50%;
+  margin-left: -325px;
+  height: 325px;
+  width: 650px;
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  object-fit: contain;
+}
+
+.game {
+  margin: 0 auto;
+  align-items: center;
+  width: 595px;
+  margin-top: 25vh;
+  display: absolute;
+}
+
+.board-container {
+  width: 595px;
+  height: 360px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.line-container {
+  top: 0;
+  left: 0;
+  width: 595px;
+  height: 360px;
+  z-index: 9;
+}
+
+.board-row {
+  margin-left: 35px;
+  margin-right: 35px;
+}
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.square {
+  background: white;
+  border: 1px solid #666;
+  float: left;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 35px;
+  height: 35px;
+  text-align: center;
+  width: 35px;
+}
+
+.square[value="null"] {
+  background: none;
+  border: 0px solid #666;
+  font-size: 0px;
+}
+
+.square[iscurr="true"] {
+  background: yellowgreen;
+}
+
+.square[istip="true"] {
+  background: orange;
+}
+
+.square:focus {
+  outline: none;
+}
+
+.icon[show="true"] {
+  margin-left: -4px;
+  margin-top: 1px;
+  max-width: 30px;
+  border-color: #999;
+}
+
+.icon[show="false"] {
+  display: none;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tool {
+  margin-top: 0;
+  margin: 30px;
+  background: #e7eaf9;
+  display: flex;
+  flex-direction: row;
+  border: 0px;
+  float: left;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 35px;
+  height: 35px;
+  text-align: center;
+  width: auto;
+}
+
+.tool img {
+  max-width: 40px;
+  margin-left: 10px;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
