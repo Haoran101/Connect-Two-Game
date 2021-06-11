@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './app.js'
-import { MAX_HEIGHT, MAX_WIDTH, ICON,  MAPS}  from './app.js'
+import App from './App.js'
+import { MAX_HEIGHT, MAX_WIDTH, ICON,  MAPS}  from './App.js'
 
 const height = MAX_HEIGHT;
 const width = MAX_WIDTH;
