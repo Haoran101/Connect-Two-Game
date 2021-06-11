@@ -1,7 +1,6 @@
 import React, { Component, createElement } from 'react';
 import ReactDOM from 'react-dom';
 import Game from './index.js'
-import './app.css'
 
 export const MAX_HEIGHT = 9;
 export const MAX_WIDTH = 15;
